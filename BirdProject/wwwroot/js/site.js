@@ -18,6 +18,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map)
 
 
 var marker;
+var longitude;
+var latitude;
 
 //On click remove the existing marker and add one in the clicking position
 map.on('click', function (e) {
@@ -27,10 +29,7 @@ map.on('click', function (e) {
     }
 
     marker = new L.marker(e.latlng, { icon: customIcon }).addTo(map);
+    latitude = e.latlng.lat;
+    longitude = e.latlng.lng;
 });
 
-
-
-"ConnectionStrings": {
-    "DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=BirdProject;Trusted_Connection=True;"
-}
