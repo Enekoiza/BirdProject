@@ -1,14 +1,48 @@
-﻿
+﻿@model BirdProject.Model.ViewModel.IndexForm
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+<div class="text-center border">
 <form method="post">
-    <input type="text" />
-    <button type="submit">Submit button</button>
+    <label asp-for="colourRingCode">Colour ring code:</label><br />
+    <input asp-for="colourRingCode" type="text" /><br />
+    <label asp-for="ringColour">Ring colour:</label><br />
+    <select id="ring-colour" asp-for="ringColour">
+        <option value="blue">Blue</option>
+        <option value="yellow" disabled>Yellow</option>
+        <option value="white" disabled>White</option>
+        <option value="orange" disabled>Orange</option>
+        <option value="red" disabled>Red</option>
+        <option value="black" disabled>Black</option>
+    </select><br />
+    <label asp-for="date">Date:</label><br />
+    <input type="date" asp-for="date"/><br />
+    <label asp-for="status">Status:</label><br />
+    <select id="status" class="mb-2" asp-for="status">
+        <option value="alive">alive</option>
+        <option value="dead">dead</option>
+    </select><br />
+    <label asp-for="specie">Specie:</label><br />
+    <select id="specie" class="mb-2" asp-for="specie">
+        <option value="gull">Lesser Black-backed Gull</option>
+        <option value="moorhen" disabled>Moorhen</option>
+    </select><br />
+    <label asp-for="comments">Comments:</label><br />
+    <textarea asp-for="comments" id="comments" name="comments" rows="4" cols="50" placeholder="Please write any comment..."></textarea><br />
 
+    <label>Select position:</label>
+    <input type="hidden" asp-for="latitude" id="latitude" />
+    <input type="hidden" asp-for="longitude" id="longitude"/>
+    <div id="map" class="border" style="width:100%; height:400px;"></div>
+
+    
+
+
+    
+    <button class="btn btn-primary m-2" type="submit">Submit data</button>
+    
 
 </form>
 </div>
