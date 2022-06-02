@@ -18,6 +18,7 @@ namespace BirdProject.Model
         public string ColourRing { get; set; } = null!;
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
+        public string? ColourRingCode { get; set; }
 
         public virtual ICollection<SpotLog> SpotLogs { get; set; }
     }
