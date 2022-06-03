@@ -16,6 +16,9 @@ var map = L.map('map').setView([51.505, -0.09], 13);
 //Create the map layer that will show the map
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map);
 
+longitudeObj = document.getElementById("longitude");
+latitudeObj = document.getElementById("latitude");
+
 
 var marker;
 var longitude;
@@ -28,8 +31,9 @@ map.on('click', function (e) {
         map.removeLayer(marker);
     }
 
+
     marker = new L.marker(e.latlng, { icon: customIcon }).addTo(map);
-    latitude = e.latlng.lat;
-    longitude = e.latlng.lng;
+    longitudeObj.value = e.latlng.lat;
+    latitudeObj.value = e.latlng.lng;
 });
 
