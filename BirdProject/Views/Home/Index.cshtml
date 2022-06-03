@@ -5,7 +5,7 @@
 }
 
 <div class="text-center border">
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <label asp-for="colourRingCode">Colour ring code:</label><br />
     <input asp-for="colourRingCode" type="text" /><br />
     <label asp-for="ringColour">Ring colour:</label><br />
@@ -29,6 +29,8 @@
         <option value="gull">Lesser Black-backed Gull</option>
         <option value="moorhen" disabled>Moorhen</option>
     </select><br />
+    <label asp-for="birdPhoto">Upload a photo:</label>
+    <input type="file" asp-for="birdPhoto" />
     <label asp-for="comments">Comments:</label><br />
     <textarea asp-for="comments" id="comments" name="comments" rows="4" cols="50" placeholder="Please write any comment..."></textarea><br />
 
