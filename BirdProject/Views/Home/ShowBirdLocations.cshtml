@@ -1,0 +1,19 @@
+﻿@model BirdProject.Model.ViewModel.birdLocationsVM
+
+
+@{
+    ViewData["Title"] = "Fetch bird data";
+}
+
+<input type="hidden" id="getBirdData" value="@Url.Action("birdData", "Home")" />
+
+<div class="text-center border">
+<label for="fetchBirdInput" class="mt-3">Enter a colour ring:</label> <br />
+
+<input id="fetchBirdInput" class="m-3" type="text" /> <br />
+
+<button type="button" id="fecthButton" class="btn btn-primary m-3">Get data</button>
+</div>
+@section Scripts{
+    <script src="~/js/Home/ShowBirdLocations/TransformLocationData.js" asp-append-version="true"></script>
+}

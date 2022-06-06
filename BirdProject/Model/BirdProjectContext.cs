@@ -15,6 +15,7 @@ namespace BirdProject.Model
             : base(options)
         {
         }
+
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; } = null!;
         public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; } = null!;
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; } = null!;
@@ -129,31 +130,36 @@ namespace BirdProject.Model
             {
                 entity.HasKey(e => e.MetalRing);
 
-                entity.ToTable("BirdBTO");
+                entity.ToTable("BirdBto");
 
                 entity.Property(e => e.MetalRing)
-                    .HasMaxLength(50)
+                    .HasMaxLength(30)
                     .IsUnicode(false)
                     .HasColumnName("metalRing");
 
-                entity.Property(e => e.ColourPos)
-                    .HasMaxLength(20)
+                entity.Property(e => e.ColourRingCode)
+                    .HasMaxLength(15)
                     .IsUnicode(false)
-                    .HasColumnName("colourPos");
+                    .HasColumnName("colourRingCode");
 
-                entity.Property(e => e.ColourRing)
+                entity.Property(e => e.ColourRingColour)
                     .HasMaxLength(20)
                     .IsUnicode(false)
-                    .HasColumnName("colourRing");
+                    .HasColumnName("colourRingColour");
+
+                entity.Property(e => e.ColourRingPosition)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("colourRingPosition");
+
+                entity.Property(e => e.GridRef)
+                    .HasMaxLength(12)
+                    .IsUnicode(false)
+                    .HasColumnName("gridRef");
 
                 entity.Property(e => e.Latitude).HasColumnName("latitude");
 
                 entity.Property(e => e.Longitude).HasColumnName("longitude");
-
-                entity.Property(e => e.MetalPos)
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnName("metalPos");
 
                 entity.Property(e => e.Sex)
                     .HasMaxLength(1)
@@ -188,9 +194,7 @@ namespace BirdProject.Model
 
                 entity.ToTable("SpotLog");
 
-                entity.Property(e => e.SpotId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("spotID");
+                entity.Property(e => e.SpotId).HasColumnName("spotID");
 
                 entity.Property(e => e.Date)
                     .HasColumnType("date")
@@ -201,12 +205,17 @@ namespace BirdProject.Model
                     .IsUnicode(false)
                     .HasColumnName("email");
 
+                entity.Property(e => e.GridRef)
+                    .HasMaxLength(12)
+                    .IsUnicode(false)
+                    .HasColumnName("gridRef");
+
                 entity.Property(e => e.Latitude).HasColumnName("latitude");
 
                 entity.Property(e => e.Longitude).HasColumnName("longitude");
 
                 entity.Property(e => e.MetalRing)
-                    .HasMaxLength(50)
+                    .HasMaxLength(30)
                     .IsUnicode(false)
                     .HasColumnName("metalRing");
 
@@ -218,7 +227,7 @@ namespace BirdProject.Model
                 entity.HasOne(d => d.MetalRingNavigation)
                     .WithMany(p => p.SpotLogs)
                     .HasForeignKey(d => d.MetalRing)
-                    .HasConstraintName("FK_SpotLog_BirdBTO");
+                    .HasConstraintName("FK_SpotLog_BirdBto");
             });
 
             OnModelCreatingPartial(modelBuilder);

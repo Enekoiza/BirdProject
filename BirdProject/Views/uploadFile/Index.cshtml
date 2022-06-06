@@ -1,0 +1,16 @@
+﻿@model BirdProject.Model.ViewModel.uploadBTOCSVFileVM
+
+
+@{
+    ViewData["Title"] = "Upload file";
+}
+
+<div class="text-center">
+    <div asp-validation-summary="All" class="text-danger border m-3"></div>
+    <form method="post" enctype="multipart/form-data">
+        <label asp-for="CSVFile">Select a file:</label><br />
+        <input type="file" asp-for="CSVFile" />
+        <button type="submit">Submit file</button>
+    </form>
+</div>
+

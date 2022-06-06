@@ -11,6 +11,7 @@ namespace BirdProject.Model
         public double? Latitude { get; set; }
         public string? MetalRing { get; set; }
         public string? Email { get; set; }
+        public string? GridRef { get; set; }
 
         public virtual Person? EmailNavigation { get; set; }
         public virtual BirdBto? MetalRingNavigation { get; set; }

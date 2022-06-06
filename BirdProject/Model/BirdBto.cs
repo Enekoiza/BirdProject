@@ -11,14 +11,14 @@ namespace BirdProject.Model
         }
 
         public string MetalRing { get; set; } = null!;
-        public string? Sex { get; set; }
-        public string? Specie { get; set; }
-        public string? MetalPos { get; set; }
-        public string ColourPos { get; set; } = null!;
-        public string ColourRing { get; set; } = null!;
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
+        public string Sex { get; set; } = null!;
+        public string Specie { get; set; } = null!;
         public string? ColourRingCode { get; set; }
+        public string? ColourRingColour { get; set; }
+        public string? ColourRingPosition { get; set; }
+        public double? Longitude { get; set; }
+        public double? Latitude { get; set; }
+        public string? GridRef { get; set; }
 
         public virtual ICollection<SpotLog> SpotLogs { get; set; }
     }
