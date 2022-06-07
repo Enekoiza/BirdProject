@@ -2,6 +2,7 @@
 using BirdProject.Model.ViewModel;
 using CsvHelper;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace BirdProject.Controllers
 {
@@ -43,10 +44,27 @@ namespace BirdProject.Controllers
                                 {
                                     string[] rows = sr.ReadLine().Split(',');
                                     bool exists = _db.BirdBtos.Any(e => e.MetalRing == rows[4]);
-                                    if (!exists)
+                                    if (!exists && rows[3] == "N")
                                     {
+                                        string ringCode, ringPos;
+                                        if (rows[77].Length > 2) { ringCode = rows[77]; ringPos = "Left-below";  }
+                                        else if (rows[78].Length > 2) { ringCode = rows[78]; ringPos = "Right-below"; }
+                                        else if (rows[79].Length > 2) { ringCode = rows[79]; ringPos = "Left-above"; }
+                                        else if (rows[80].Length > 2) { ringCode = rows[80]; ringPos = "Right-above"; }
+                                        else { ringCode = "noRing"; ringPos = "noRing"; }
+
+                                        string result = Regex.Match(ringCode, @"\(([^)]*)\)").Groups[1].Value;
+
                                         _db.BirdBtos.Add(new BirdBto
                                         {
+                                            MetalRing = rows[4],
+                                            Sex = rows[12],
+                                            Specie = rows[8],
+                                            GridRef = rows[19],
+                                            Latitude = null,
+                                            Longitude = null,
+                                            ColourRingCode = ringCode,
+                                            ColourRingPosition = ringPos,
 
                                         });
                                     }
