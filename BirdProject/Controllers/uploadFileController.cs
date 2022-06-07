@@ -46,14 +46,50 @@ namespace BirdProject.Controllers
                                     bool exists = _db.BirdBtos.Any(e => e.MetalRing == rows[4]);
                                     if (!exists && rows[3] == "N")
                                     {
-                                        string ringCode, ringPos;
-                                        if (rows[77].Length > 2) { ringCode = rows[77]; ringPos = "Left-below";  }
-                                        else if (rows[78].Length > 2) { ringCode = rows[78]; ringPos = "Right-below"; }
-                                        else if (rows[79].Length > 2) { ringCode = rows[79]; ringPos = "Left-above"; }
-                                        else if (rows[80].Length > 2) { ringCode = rows[80]; ringPos = "Right-above"; }
-                                        else { ringCode = "noRing"; ringPos = "noRing"; }
+                                        
 
-                                        string result = Regex.Match(ringCode, @"\(([^)]*)\)").Groups[1].Value;
+
+                                        string ringCode, ringPos, ringColour;
+                                        if (rows[77].Length > 2) 
+                                        { 
+                                            ringCode = rows[77]; 
+                                            ringPos = "Left-below";
+                                            ringColour = rows[77].Substring(0, 1);
+                                        }
+                                        else if (rows[78].Length > 2) 
+                                        { 
+                                            ringCode = rows[78]; 
+                                            ringPos = "Right-below";
+                                            ringColour = rows[78].Substring(0, 1);
+                                        }
+                                        else if (rows[79].Length > 2) 
+                                        { 
+                                            ringCode = rows[79]; 
+                                            ringPos = "Left-above";
+                                            ringColour = rows[79].Substring(0, 1);
+                                        }
+                                        else if (rows[80].Length > 2) 
+                                        { 
+                                            ringCode = rows[80]; 
+                                            ringPos = "Right-above";
+                                            ringColour = rows[80].Substring(0, 1);
+                                        }
+                                        else 
+                                        { 
+                                            ringCode = "noRing"; 
+                                            ringPos = "noRing";
+                                            ringColour = "noRing";
+                                        }
+
+                                        switch (ringColour) 
+                                        {
+                                            case "B":
+                                                ringColour = "Blue";
+                                                break;
+                                        
+                                        }
+
+                                        ringCode = Regex.Match(ringCode, @"\(([^)]*)\)").Groups[1].Value;
 
                                         _db.BirdBtos.Add(new BirdBto
                                         {
@@ -65,11 +101,12 @@ namespace BirdProject.Controllers
                                             Longitude = null,
                                             ColourRingCode = ringCode,
                                             ColourRingPosition = ringPos,
+                                            ColourRingColour = ringColour
 
                                         });
                                     }
                                 }
-                                
+                                _db.SaveChanges();
                             }
                         }
                     }
