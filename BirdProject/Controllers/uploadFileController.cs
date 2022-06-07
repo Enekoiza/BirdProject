@@ -1,4 +1,5 @@
-﻿using BirdProject.Model.ViewModel;
+﻿using BirdProject.Model;
+using BirdProject.Model.ViewModel;
 using CsvHelper;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,6 +7,16 @@ namespace BirdProject.Controllers
 {
     public class uploadFileController : Controller
     {
+
+        private readonly ILogger<HomeController> _logger;
+        private readonly BirdProjectContext _db;
+
+        public uploadFileController(ILogger<HomeController> logger, BirdProjectContext db)
+        {
+            _logger = logger;
+            _db = db;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -26,12 +37,21 @@ namespace BirdProject.Controllers
                         {
                             using (StreamReader sr = new StreamReader(stream))
                             {
+                                string[] headers = sr.ReadLine().Split(',');
+
                                 while (!sr.EndOfStream)
                                 {
                                     string[] rows = sr.ReadLine().Split(',');
-                                    
+                                    bool exists = _db.BirdBtos.Any(e => e.MetalRing == rows[4]);
+                                    if (!exists)
+                                    {
+                                        _db.BirdBtos.Add(new BirdBto
+                                        {
 
+                                        });
+                                    }
                                 }
+                                
                             }
                         }
                     }
