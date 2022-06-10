@@ -46,47 +46,47 @@ namespace BirdProject.Controllers
                                     bool exists = _db.BirdBtos.Any(e => e.MetalRing == rows[4]);
                                     if (!exists && rows[3] == "N")
                                     {
-                                        
+
 
 
                                         string ringCode, ringPos, ringColour;
-                                        if (rows[77].Length > 2) 
-                                        { 
-                                            ringCode = rows[77]; 
+                                        if (rows[77].Length > 2)
+                                        {
+                                            ringCode = rows[77];
                                             ringPos = "Left-below";
                                             ringColour = rows[77].Substring(0, 1);
                                         }
-                                        else if (rows[78].Length > 2) 
-                                        { 
-                                            ringCode = rows[78]; 
+                                        else if (rows[78].Length > 2)
+                                        {
+                                            ringCode = rows[78];
                                             ringPos = "Right-below";
                                             ringColour = rows[78].Substring(0, 1);
                                         }
-                                        else if (rows[79].Length > 2) 
-                                        { 
-                                            ringCode = rows[79]; 
+                                        else if (rows[79].Length > 2)
+                                        {
+                                            ringCode = rows[79];
                                             ringPos = "Left-above";
                                             ringColour = rows[79].Substring(0, 1);
                                         }
-                                        else if (rows[80].Length > 2) 
-                                        { 
-                                            ringCode = rows[80]; 
+                                        else if (rows[80].Length > 2)
+                                        {
+                                            ringCode = rows[80];
                                             ringPos = "Right-above";
                                             ringColour = rows[80].Substring(0, 1);
                                         }
-                                        else 
-                                        { 
-                                            ringCode = "noRing"; 
+                                        else
+                                        {
+                                            ringCode = "noRing";
                                             ringPos = "noRing";
                                             ringColour = "noRing";
                                         }
 
-                                        switch (ringColour) 
+                                        switch (ringColour)
                                         {
                                             case "B":
                                                 ringColour = "Blue";
                                                 break;
-                                        
+
                                         }
 
                                         ringCode = Regex.Match(ringCode, @"\(([^)]*)\)").Groups[1].Value;
@@ -106,9 +106,38 @@ namespace BirdProject.Controllers
                                         });
                                     }
                                 }
-                                _db.SaveChanges();
                             }
                         }
+                        using (var stream = BTOfile.CSVFile.OpenReadStream())
+                        {
+                            using (StreamReader sr = new StreamReader(stream))
+                            {
+                                string[] headers = sr.ReadLine().Split(',');
+
+                                while (!sr.EndOfStream)
+                                {
+                                    string[] rows = sr.ReadLine().Split(',');
+                                    bool exists = _db.BirdBtos.Any(e => e.MetalRing == rows[4]);
+                                    if (!exists && rows[3] == "S")
+                                    {
+
+                                        DateTime today = DateTime.Today;
+
+
+                                        _db.SpotLogs.Add(new SpotLog
+                                        {
+                                            Date = today,
+                                            Longitude = null,
+                                            Latitude = null,
+                                            GridRef = rows[19],
+                                            MetalRing = rows[4],
+                                            Email = null
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                        _db.SaveChanges();
                     }
                     else
                     {
