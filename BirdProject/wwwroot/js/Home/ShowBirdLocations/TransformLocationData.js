@@ -1,4 +1,10 @@
-﻿var url = document.getElementById("getBirdData").value;
+﻿import { getLat, getLng } from "../../modules/GeoTools.js"; 
+
+//console.log(getLat("ST2522"));
+//console.log(getLng("ST2522"));
+
+
+var url = document.getElementById("getBirdData").value;
 
 
 async function postData(url = '', data = {}) {
