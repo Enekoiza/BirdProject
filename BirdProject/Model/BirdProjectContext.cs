@@ -152,6 +152,10 @@ namespace BirdProject.Model
                     .IsUnicode(false)
                     .HasColumnName("colourRingPosition");
 
+                entity.Property(e => e.Date)
+                    .HasColumnType("date")
+                    .HasColumnName("date");
+
                 entity.Property(e => e.GridRef)
                     .HasMaxLength(12)
                     .IsUnicode(false)
@@ -222,11 +226,13 @@ namespace BirdProject.Model
                 entity.HasOne(d => d.EmailNavigation)
                     .WithMany(p => p.SpotLogs)
                     .HasForeignKey(d => d.Email)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_SpotLog_Person");
 
                 entity.HasOne(d => d.MetalRingNavigation)
                     .WithMany(p => p.SpotLogs)
                     .HasForeignKey(d => d.MetalRing)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_SpotLog_BirdBto");
             });
 

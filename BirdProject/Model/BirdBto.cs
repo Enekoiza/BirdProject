@@ -19,6 +19,7 @@ namespace BirdProject.Model
         public double? Longitude { get; set; }
         public double? Latitude { get; set; }
         public string? GridRef { get; set; }
+        public DateTime? Date { get; set; }
 
         public virtual ICollection<SpotLog> SpotLogs { get; set; }
     }
