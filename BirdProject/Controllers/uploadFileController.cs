@@ -34,6 +34,8 @@ namespace BirdProject.Controllers
             {
                 if(BTOfile != null)
                 {
+
+                    //FileInfo object to hold the file
                     FileInfo fileInfo = new FileInfo(BTOfile.CSVFile.FileName);
 
                     string? gridRef = null, colourRingCode = null, colourRingPosition = null, colourRingColour = null;
