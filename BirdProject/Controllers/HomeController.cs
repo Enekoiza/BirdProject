@@ -56,7 +56,6 @@ namespace BirdProject.Controllers
 
         public IActionResult Index()
         {
-
             return View();
         }
 

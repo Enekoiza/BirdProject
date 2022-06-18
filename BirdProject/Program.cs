@@ -7,8 +7,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<BirdProjectContext>(options =>
-    options.UseSqlServer(connectionString));
+
+
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 28));
+
+builder.Services.AddDbContext<BirdProjectContext>(
+            dbContextOptions => dbContextOptions
+                .UseMySql(connectionString,ServerVersion.AutoDetect(connectionString))
+                // The following three options help with debugging, but should
+                // be changed or removed for production.
+                .LogTo(Console.WriteLine, LogLevel.Information)
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors()
+        );
+
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)

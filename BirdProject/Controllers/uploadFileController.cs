@@ -43,7 +43,7 @@ namespace BirdProject.Controllers
 
 
 
-                    IGeocoder geocoder = new GoogleGeocoder() { ApiKey = "" };
+                    IGeocoder geocoder = new GoogleGeocoder() { ApiKey = "AIzaSyC9CgPS4ItuYn1SjMRJ6um7P9qqmCnPyC4" };
 
 
                     static async Task<List<double>> getCoordinatesByPlaceAsync(string placeName, IGeocoder geocoder)
