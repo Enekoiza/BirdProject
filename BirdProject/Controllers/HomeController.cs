@@ -26,33 +26,43 @@ namespace BirdProject.Controllers
 
 
         [HttpPost]
-        public async Task<string> birdData([FromHeader] string data)
+        public string birdData([FromHeader] string data)
         {
-            var VM = new birdLocationsVM();
+            //var VM = new birdLocationsVM();
+
+            var VM = new birdDataSolutionVM();
+
             List<birdRecordVM> birdRecords = new List<birdRecordVM>();
 
+            var holder = _db.SpotLogs.Where(a => a.MetalRing == "FB11111");
 
-            var bird1 = new birdRecordVM { longitude = 25.2F, latitude = 25.2F, gridRef = null };
-            var bird2 = new birdRecordVM { longitude = 40.2F, latitude = 25.2F, gridRef = null };
-            var bird3 = new birdRecordVM { longitude = 23.4F, latitude = 25.2F, gridRef = null };
-            var bird4 = new birdRecordVM { longitude = null, latitude = null, gridRef = "ST2264" };
+            foreach (var item in holder)
+            {
+
+                var birdLog = new birdRecordVM
+                {
+                    longitude = item.Longitude,
+                    latitude = item.Latitude,
+                    gridRef = item.GridRef,
+                    date = item.Date
+
+                };
+
+                birdRecords.Add(birdLog);
+            }
 
 
+            VM.birdData = birdRecords;
 
-            birdRecords.Add(bird1);
-            birdRecords.Add(bird2);
-            birdRecords.Add(bird3);
-            birdRecords.Add(bird4);
-
-            VM.birdRecords = birdRecords;
-
-
+            VM.metalRingID = "FB11111";
 
 
             string a = JsonConvert.SerializeObject(VM);
             return a;
 
         }
+
+
 
         public IActionResult Index()
         {
@@ -93,6 +103,9 @@ namespace BirdProject.Controllers
 
             return View();
         }
+
+
+
 
         public IActionResult Privacy()
         {
