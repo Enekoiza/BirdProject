@@ -3,7 +3,10 @@ using BirdProject.Model.ViewModel;
 using BirdProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+
+
 
 namespace BirdProject.Controllers
 {
@@ -20,21 +23,47 @@ namespace BirdProject.Controllers
 
         public IActionResult ShowBirdLocations()
         {
+            var err = TempData["WrongRingCodeErrorMessage"] as String;
+
+
+            if(err == "Error message")
+            {
+                ModelState.AddModelError("CustomError", "Sorry, it looks like the submission did not go through.");
+            }
 
             return View();
         }
 
 
         [HttpPost]
-        public string birdData([FromHeader] string data)
+        public ActionResult<string> birdData([FromHeader] string data)
         {
-            //var VM = new birdLocationsVM();
 
             var VM = new birdDataSolutionVM();
 
+            JObject json = JObject.Parse(data);
+
+            var userRing = json["ringCode"].ToString();
+
+            bool check = _db.BirdBtos.Any(e=>e.ColourRingCode.Equals(userRing));
+
+            if (check == false)
+            {
+                TempData["WrongRingCodeErrorMessage"] = "Error message";
+
+
+
+                return RedirectToAction("ShowBirdLocations");
+            }
+
             List<birdRecordVM> birdRecords = new List<birdRecordVM>();
 
-            var holder = _db.SpotLogs.Where(a => a.MetalRing == "FB11111");
+            var metalRingHolder = _db.BirdBtos.Where(a => a.ColourRingCode.Equals(userRing)).ToList();
+
+            var holder = _db.SpotLogs.Where(a => a.MetalRing == metalRingHolder[0].MetalRing);
+
+            var holder1 = _db.BirdBtos.Where(a => a.MetalRing == metalRingHolder[0].MetalRing).ToList();
+
 
             foreach (var item in holder)
             {
@@ -51,14 +80,23 @@ namespace BirdProject.Controllers
                 birdRecords.Add(birdLog);
             }
 
+            var birdLogFirstCapture = new birdRecordVM
+            {
+                longitude = holder1[0].Longitude,
+                latitude = holder1[0].Latitude,
+                gridRef = holder1[0].GridRef,
+                date = holder1[0].Date
+            };
+
+            birdRecords.Add(birdLogFirstCapture);
 
             VM.birdData = birdRecords;
 
-            VM.metalRingID = "FB11111";
+            VM.metalRingID = userRing;
 
 
-            string a = JsonConvert.SerializeObject(VM);
-            return a;
+            string jsonResponse = JsonConvert.SerializeObject(VM);
+            return jsonResponse;
 
         }
 
@@ -74,17 +112,38 @@ namespace BirdProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(form1.birdPhoto != null)
+                if (!_db.BirdBtos.Any(e => e.ColourRingCode.Equals(form1.colourRingCode)))
+                {
+                    ModelState.AddModelError("NoData", "Sorry, we are not currently holding data about that bird.");
+                    return View();
+                }
+
+
+                if (form1.birdPhoto != null)
                 {
                     string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Photos");
+
+
 
                     string specie = form1.specie;
                     string ringCode = form1.colourRingCode;
 
                     FileInfo fileInfo = new FileInfo(form1.birdPhoto.FileName);
-                    string fileName = "F22" + fileInfo.Extension;
+
+                    string fileName = form1.colourRingCode + fileInfo.Extension;
 
                     string fileNameWithPath = Path.Combine(path, fileName);
+
+                    int fileCounter = 0;
+
+                    while (System.IO.File.Exists(fileNameWithPath))
+                    {
+                        fileName = form1.colourRingCode + "-" + fileCounter.ToString() + fileInfo.Extension;
+
+                        fileNameWithPath = Path.Combine(path, fileName);
+
+                        fileCounter++;
+                    }
 
                     using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
                     {
@@ -92,18 +151,43 @@ namespace BirdProject.Controllers
                     }
                 }
 
+
+                var holder = _db.BirdBtos.Where(a => a.ColourRingCode == form1.colourRingCode).ToList();
+
+                var metalRingCode = holder[0].MetalRing;
+
+                var newSpot = new SpotLog {
+                    Latitude = form1.latitude,
+                    Longitude = form1.longitude,
+                    Date = form1.date,
+                    GridRef = null,
+                    Email = null,
+                    MetalRing = metalRingCode
+
+                };
+
                 
 
+                _db.SpotLogs.Add(newSpot);
+                _db.SaveChanges();
 
-                var newSpot = new SpotLog();
-                newSpot.Longitude = form1.longitude;
-                newSpot.Latitude = form1.latitude;
-                newSpot.Date = form1.date;
+                TempData["metalRing"] = form1.colourRingCode;
+
+                return RedirectToAction("returnFullData");
             }
 
             return View();
         }
 
+        public IActionResult returnFullData()
+        {
+
+            var metalRingCode = TempData["metalRing"] as string;
+
+            var dataAfterRequest = new dataAfterRequestVM { metalRing = metalRingCode };
+
+            return View(dataAfterRequest);
+        }
 
 
 
@@ -119,3 +203,4 @@ namespace BirdProject.Controllers
         }
     }
 }
+
