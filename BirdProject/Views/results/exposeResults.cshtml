@@ -1,0 +1,110 @@
+﻿@model BirdProject.Model.ViewModel.fullBirdData
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+
+@{
+    ViewData["Title"] = "Stored data";
+}
+
+@{
+    int counter = 0;
+    int cityCounter = 0;
+    string latitude = "", longitude = "";
+
+    foreach (var item in Model.restCaptures.birdData)
+    {
+        latitude = item.latitude.ToString() + counter.ToString();
+
+        <input type="hidden" id="latitude@(counter)" value="@item.latitude" />
+        <input type="hidden" id="longitude@(counter)" value="@item.longitude" />
+        <input type="hidden" id="date@(counter)" value="@item.date" />
+
+        counter++;
+
+    }
+    <input type="hidden" value="@counter" id="counter" />
+}
+
+
+
+<div id="map" class="border" style="width:100%; height:400px;"></div>
+
+<table class="table table-striped border mt-3 text-center">
+    <tr>
+        <th>
+            First date
+        </th>
+        <th>
+            Metal ring code
+        </th>
+        <th>
+            Position of the colour ring
+        </th>
+        <th>
+            Colour of the colour ring
+        </th>
+        <th>
+            Specie
+        </th>
+        <th>
+            Sex
+        </th>
+    </tr>
+    <tr>
+        <td>
+            @Model.restCaptures.birdData[counter - 1].date.Value.ToString("dd/MM/yyyy")
+        </td>
+        <td>
+            @Model.restCaptures.metalRingID
+        </td>
+        <td>
+            @Model.firstCapture.ColourRingPosition
+        </td>
+        <td>
+            @Model.firstCapture.ColourRingColour
+        </td>
+        <td>
+            @Model.firstCapture.Specie
+        </td>
+        <td>@Model.firstCapture.Sex</td>
+    </tr>
+
+</table>
+
+<table class="table table-striped border mt-3 text-center" style="width: 100%;">
+    <tr>
+        <th>
+            Date
+        </th>
+        <th>
+            Place name
+        </th>
+    </tr>
+    @{
+
+
+        @while (cityCounter < counter - 1)
+        {
+            <tr>
+                <td>
+                    @Model.restCaptures.birdData[cityCounter].date
+                </td>
+                <td>
+                    @Model.cityNames[cityCounter]
+                </td>
+            </tr>
+            cityCounter++;
+        }
+
+    }
+</table>
+
+
+
+
+@section Scripts{
+    <script src="~/js/results/exposeResults/GenerateMap.js" asp-append-version="true"></script>
+}
