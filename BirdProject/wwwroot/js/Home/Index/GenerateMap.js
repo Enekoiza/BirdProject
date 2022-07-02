@@ -10,10 +10,12 @@ var customIcon = L.icon({
 });
 
 //Create a map and set the view to London
+
 var map = L.map('map').setView([51.505, -0.09], 13);
 
 
 //Create the map layer that will show the map
+
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map);
 
 longitudeObj = document.getElementById("longitude");
@@ -24,6 +26,7 @@ var marker;
 var longitude;
 var latitude;
 
+
 //On click remove the existing marker and add one in the clicking position
 map.on('click', function (e) {
 
@@ -33,7 +36,7 @@ map.on('click', function (e) {
 
 
     marker = new L.marker(e.latlng, { icon: customIcon }).addTo(map);
-    longitudeObj.value = e.latlng.lat;
-    latitudeObj.value = e.latlng.lng;
+    latitudeObj.value = e.latlng.lat;
+    longitudeObj.value = e.latlng.lng;
 });
 
