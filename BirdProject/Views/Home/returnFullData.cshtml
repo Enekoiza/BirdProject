@@ -1,0 +1,12 @@
+﻿@model BirdProject.Model.ViewModel.dataAfterRequestVM
+
+<input type="hidden" id="metalRing" value="@Model.metalRing" />
+
+<input type="hidden" id="getBirdData" value="@Url.Action("birdData", "Home")" />
+
+
+
+@section Scripts{
+    <script type="module" src="~/js/modules/GeoTools.js" asp-append-version="true"></script>
+    <script type="module" src="~/js/Home/returnFullData/fetchData.js" asp-append-version="true"></script>
+}
