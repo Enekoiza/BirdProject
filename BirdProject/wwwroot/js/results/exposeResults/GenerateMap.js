@@ -41,12 +41,12 @@ for (let x = 0; x < counter; x++) {
 
 
     if (x == (counter - 1)) {
-        L.marker(latlng, { icon: customIcon1 }).addTo(map).bindPopup(date);
+        L.marker(latlng, { icon: customIcon1 }).addTo(map).bindPopup("First Capture");
 
         break;
     }
     else {
-        L.marker(latlng).addTo(map).bindPopup(date);
+        L.marker(latlng).addTo(map).bindPopup("Retrapped");
     }
 
 }
